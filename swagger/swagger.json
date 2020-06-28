@@ -41,6 +41,28 @@
         }
       }
     },
+    "/jwks/Get": {
+      "get": {
+        "description": "An endpoint that returns a valid jwks.",
+        "tags": [
+          "JWKS Service"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/JWKSResponse"
+          },
+          "501": {
+            "$ref": "#/responses/NotImplementedError"
+          },
+          "5XX": {
+            "$ref": "#/responses/UncaughtError"
+          }
+        }
+      }
+    },
     "/planet/Defend": {
       "post": {
         "description": "A planet defends an attack from a given weapon.",
@@ -169,6 +191,28 @@
         }
       }
     },
+    "ErrorNotImplemented": {
+      "type": "object",
+      "required": [
+        "name",
+        "message",
+        "code"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "MoleculerError"
+        },
+        "message": {
+          "type": "string",
+          "example": "JWKS is not implemented on this server."
+        },
+        "code": {
+          "type": "integer",
+          "example": 501
+        }
+      }
+    },
     "ErrorUncaught": {
       "type": "object",
       "required": [
@@ -205,6 +249,51 @@
         "weaponMessage": {
           "type": "string",
           "example": "Death Star did 89 damage and left 986 ammo."
+        }
+      }
+    },
+    "JWKSResponseBody": {
+      "type": "object",
+      "required": [
+        "keys"
+      ],
+      "properties": {
+        "keys": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/JWK"
+          }
+        }
+      }
+    },
+    "JWK": {
+      "type": "object",
+      "required": [
+        "e",
+        "n",
+        "kty",
+        "kid"
+      ],
+      "properties": {
+        "e": {
+          "type": "string",
+          "description": "The exponent for the RSA public key.",
+          "example": "AQAB"
+        },
+        "n": {
+          "type": "string",
+          "description": "The modulus for the RSA public key.",
+          "example": "2I8AXk_HeToAVOwJEtK_JvvhXBOyiJiE8rIrED9p751M1VggaTTndi7IZjL7MQ_-GrYi-zDtXZUpuDp7joFI6ixe6MSG12LliDw34xLhmQA4rZbrj8KRDucBPvGgKJp_EoSfHnGp1jgV1U43Xe4oRQgaRnLjYXcYEeh0EZ7OmFTnEcwsNxxkTatiDYJxBiKz3gk-FD7KdiREyIBmHD3NGX2oK8LK9EsqYDkgPnRVejrqaezhn7mDhAwkBI4MayMlZG7ygMk-gsJNvtJa-XJpfxFYxA3J2rcBhBoOqrGjrhE0Yd17rQjI1F5vdy1lDopgHS7-BEDabQcJ9u3CCXcebQ"
+        },
+        "kty": {
+          "type": "string",
+          "description": "The family of cryptographic algorithms used with the key.",
+          "example": "RSA"
+        },
+        "kid": {
+          "type": "string",
+          "description": "The unique identifier for the key.",
+          "example": "dIPbFeRBudnKdeeinfgYG5AHNLPuRPegACK0CqLUwCc"
         }
       }
     },
@@ -257,6 +346,21 @@
         "$ref": "#/definitions/ErrorEntityNotFound"
       }
     },
+    "NotImplementedError": {
+      "description": "The server tried to call a method that is not implemented.",
+      "headers": {
+        "content-type": {
+          "description": "The Content-Type entity header is used to indicate the media type of the resource.",
+          "schema": {
+            "type": "string",
+            "example": "application/json; charset=utf-8"
+          }
+        }
+      },
+      "schema": {
+        "$ref": "#/definitions/ErrorNotImplemented"
+      }
+    },
     "UncaughtError": {
       "description": "The server encountered an unhandled error.",
       "headers": {
@@ -293,6 +397,29 @@
       "schema": {
         "type": "object",
         "$ref": "#/definitions/AttackResponseBody"
+      }
+    },
+    "JWKSResponse": {
+      "description": "Ok",
+      "headers": {
+        "content-type": {
+          "description": "The Content-Type entity header is used to indicate the media type of the resource.",
+          "schema": {
+            "type": "string",
+            "example": "application/json; charset=utf-8"
+          }
+        },
+        "content-length": {
+          "description": "The Content-Length entity-header field indicates the size of the entity-body.",
+          "schema": {
+            "type": "integer",
+            "example": 436
+          }
+        }
+      },
+      "schema": {
+        "type": "object",
+        "$ref": "#/definitions/JWKSResponseBody"
       }
     },
     "DefendResponse": {
@@ -358,6 +485,10 @@
     {
       "name": "Attack Service",
       "description": "Attacks to the planet with given weapon."
+    },
+    {
+      "name": "JWKS Service",
+      "description": "Creates a JWK Store and returns a valid jwks."
     },
     {
       "name": "Planet Service",
