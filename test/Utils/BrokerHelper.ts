@@ -5,6 +5,7 @@ import { ServiceBroker } from 'moleculer';
 /* eslint-disable */
 //#region Local Imports
 const AttackService = require('../../services/attack.service');
+const JWKService = require('../../services/jwks.service');
 const PlanetService = require('../../services/planet.service');
 //#endregion Local Imports
 /* eslint-enable */
@@ -14,6 +15,7 @@ export namespace BrokerHelper {
 		const broker = new ServiceBroker({ logger: false });
 
 		broker.createService(AttackService);
+		broker.createService(JWKService);
 		broker.createService(PlanetService);
 
 		return broker;
