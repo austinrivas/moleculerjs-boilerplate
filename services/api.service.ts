@@ -80,6 +80,23 @@ import * as ApiGateway from 'moleculer-web';
  *         type: string
  *         example: "attack.Fire"
  *
+ *   ErrorNotImplemented:
+ *     type: object
+ *     required:
+ *       - name
+ *       - message
+ *       - code
+ *     properties:
+ *       name:
+ *         type: string
+ *         example: "MoleculerError"
+ *       message:
+ *         type: string
+ *         example: 'JWKS is not implemented on this server.'
+ *       code:
+ *         type: integer
+ *         example: 501
+ *
  *   ErrorUncaught:
  *     type: object
  *     required:
@@ -149,6 +166,17 @@ import * as ApiGateway from 'moleculer-web';
  *           example: 'application/json; charset=utf-8'
  *     schema:
  *       $ref: '#/definitions/ErrorEntityNotFound'
+ *
+ *   NotImplementedError:
+ *     description: The server tried to call a method that is not implemented.
+ *     headers:
+ *       content-type:
+ *         description: The Content-Type entity header is used to indicate the media type of the resource.
+ *         schema:
+ *           type: string
+ *           example: 'application/json; charset=utf-8'
+ *     schema:
+ *       $ref: '#/definitions/ErrorNotImplemented'
  *
  *   UncaughtError:
  *     description: The server encountered an unhandled error.
