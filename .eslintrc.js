@@ -45,6 +45,12 @@ module.exports = {
         selector: "parameter", format: ["camelCase"], leadingUnderscore: "allow"
       },
       {
+        selector: "property", format: ["camelCase", "UPPER_CASE"], leadingUnderscore: "allow"
+      },
+      {
+        selector: "property", modifiers: ["private"], format: ["camelCase"], leadingUnderscore: "require"
+      },
+      {
         selector: "memberLike", format: ["camelCase", "PascalCase"]
       },
       {

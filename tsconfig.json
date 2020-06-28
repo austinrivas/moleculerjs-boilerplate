@@ -24,6 +24,12 @@
 			],
 			"@MicroServices": [
 				"services"
+      ],
+      "@Config/*": [
+				"src/Config/*"
+			],
+			"@Config": [
+				"src/Config"
 			],
 			"@Interfaces/*": [
 				"src/Interfaces/*"
