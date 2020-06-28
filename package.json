@@ -54,6 +54,7 @@
     "typescript": "^3.9.5"
   },
   "dependencies": {
+    "jose": "^1.27.1",
     "moleculer": "^0.14.8",
     "moleculer-decorators": "^1.3.0",
     "moleculer-web": "^0.9.1",
