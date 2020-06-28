@@ -7,6 +7,7 @@ services:
     depends_on:
         - 'attack'
         - 'planet'
+        - 'jwks'
         - 'nats-server'
     env_file: docker-compose.env
     environment:
@@ -14,6 +15,15 @@ services:
       PORT: 3000
     ports:
       - "3000:3000"
+
+  jwks:
+    build: .
+    image: jwks
+    depends_on:
+        - 'nats-server'
+    env_file: docker-compose.env
+    environment:
+      SERVICES: jwks
 
   attack:
     build: .
