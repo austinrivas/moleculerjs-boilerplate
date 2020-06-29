@@ -4,10 +4,10 @@ import AttackSeeder from './AttackSeeder';
 //#region Local Imports
 
 const seed = async (): Promise<void> => {
-	await PlanetSeeder.seed();
-	await AttackSeeder.seed();
+  await PlanetSeeder.seed();
+  await AttackSeeder.seed();
 };
 
 export default {
-	seed,
+  seed,
 };

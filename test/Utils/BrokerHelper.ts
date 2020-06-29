@@ -11,13 +11,13 @@ const PlanetService = require('../../services/planet.service');
 /* eslint-enable */
 
 export namespace BrokerHelper {
-	export const setupBroker = (): ServiceBroker => {
-		const broker = new ServiceBroker({ logger: false });
+  export const setupBroker = (): ServiceBroker => {
+    const broker = new ServiceBroker({ logger: false });
 
-		broker.createService(AttackService);
-		broker.createService(JWKService);
-		broker.createService(PlanetService);
+    broker.createService(AttackService);
+    broker.createService(JWKService);
+    broker.createService(PlanetService);
 
-		return broker;
-	};
+    return broker;
+  };
 }

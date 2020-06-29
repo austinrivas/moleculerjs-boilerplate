@@ -12,20 +12,20 @@ import { DecreaseShieldOutDto } from '@Interfaces';
 //#endregion Interface Imports
 
 export namespace PlanetRepository {
-	export const Get = async (planetName: string): Promise<Planet> => {
-		return await getResource(Planet, { where: { name: planetName } });
-	};
+  export const Get = async (planetName: string): Promise<Planet> => {
+    return await getResource(Planet, { where: { name: planetName } });
+  };
 
-	export const DecreaseShield = async (
-		planetName: string,
-		remainingShield: number,
-	): Promise<DecreaseShieldOutDto> => {
-		const planet = await getResource(Planet, { where: { name: planetName } });
+  export const DecreaseShield = async (
+    planetName: string,
+    remainingShield: number,
+  ): Promise<DecreaseShieldOutDto> => {
+    const planet = await getResource(Planet, { where: { name: planetName } });
 
-		planet.shield = remainingShield;
+    planet.shield = remainingShield;
 
-		await getManager().save(planet);
+    await getManager().save(planet);
 
-		return { remainingShield: planet.shield };
-	};
+    return { remainingShield: planet.shield };
+  };
 }

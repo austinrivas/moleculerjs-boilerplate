@@ -9,48 +9,46 @@ import { Weapon } from '@Entities';
 //#endregion Local Imports
 
 describe('Test WeaponRepository constructor', () => {
-	it('should be defined', () => {
-		expect(WeaponRepository).toBeDefined();
-	});
+  it('should be defined', () => {
+    expect(WeaponRepository).toBeDefined();
+  });
 });
 
 describe('Weapon Repository Methods', () => {
-	beforeEach(async () => {
-		await setupDatabase();
-	});
+  beforeEach(async () => {
+    await setupDatabase();
+  });
 
-	afterEach(async () => {
-		await getConnection().close();
-	});
+  afterEach(async () => {
+    await getConnection().close();
+  });
 
-	describe('GetWeapon', () => {
-		it('should get weapon', async () => {
-			const weaponName = 'Death Star';
+  describe('GetWeapon', () => {
+    it('should get weapon', async () => {
+      const weaponName = 'Death Star';
 
-			const weapon = await WeaponRepository.Get(weaponName);
+      const weapon = await WeaponRepository.Get(weaponName);
 
-			expect(weapon.name).toEqual(weaponName);
-		});
+      expect(weapon.name).toEqual(weaponName);
+    });
 
-		it('should throw an error if weapon not found', async () => {
-			const weaponName = `I don't exist`;
+    it('should throw an error if weapon not found', async () => {
+      const weaponName = `I don't exist`;
 
-			await expect(WeaponRepository.Get(weaponName)).rejects.toThrow(
-				'{"name":"I don\'t exist"}',
-			);
-		});
-	});
+      await expect(WeaponRepository.Get(weaponName)).rejects.toThrow('{"name":"I don\'t exist"}');
+    });
+  });
 
-	it('Decrease Ammo', async () => {
-		const entityManager = getManager();
+  it('Decrease Ammo', async () => {
+    const entityManager = getManager();
 
-		const weaponName = 'Death Star';
-		const weapon = await entityManager.findOne(Weapon, { where: { name: weaponName } });
+    const weaponName = 'Death Star';
+    const weapon = await entityManager.findOne(Weapon, { where: { name: weaponName } });
 
-		const expectedAmmo = weapon!.ammo - 1;
+    const expectedAmmo = weapon!.ammo - 1;
 
-		const { remainingAmmo } = await WeaponRepository.DecreaseAmmo(weaponName);
+    const { remainingAmmo } = await WeaponRepository.DecreaseAmmo(weaponName);
 
-		expect(remainingAmmo).toEqual(expectedAmmo);
-	});
+    expect(remainingAmmo).toEqual(expectedAmmo);
+  });
 });

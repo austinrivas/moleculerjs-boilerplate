@@ -19,21 +19,21 @@ import { IJWKS } from '@Interfaces';
  *   description: Creates a JWK Store and returns a valid jwks.
  */
 @Service({
-	name: 'jwks',
+  name: 'jwks',
 })
 class JWKSService extends MoleculerService {
-	private _keyStore: JWKS.KeyStore;
+  private _keyStore: JWKS.KeyStore;
 
-	constructor(broker: ServiceBroker) {
-		super(broker);
-		this._keyStore = JWTMeta.GetJWTStore();
-	}
+  constructor(broker: ServiceBroker) {
+    super(broker);
+    this._keyStore = JWTMeta.GetJWTStore();
+  }
 
-	/**
-	 * @swagger
-	 *
-	 * definitions:
-	 *
+  /**
+   * @swagger
+   *
+   * definitions:
+   *
    *   JWKSResponseBody:
    *     type: object
    *     required:
@@ -43,7 +43,7 @@ class JWKSService extends MoleculerService {
    *         type: array
    *         items:
    *           $ref: '#/definitions/JWK'
-   * 
+   *
    *   JWK:
    *     type: object
    *     required:
@@ -68,51 +68,51 @@ class JWKSService extends MoleculerService {
    *         type: string
    *         description: The unique identifier for the key.
    *         example: "dIPbFeRBudnKdeeinfgYG5AHNLPuRPegACK0CqLUwCc"
-	 *
-	 * responses:
-	 *
-	 *   JWKSResponse:
-	 *     description: Ok
-	 *     headers:
-	 *       content-type:
-	 *         description: The Content-Type entity header is used to indicate the media type of the resource.
-	 *         schema:
-	 *           type: string
-	 *           example: 'application/json; charset=utf-8'
-	 *       content-length:
-	 *         description: The Content-Length entity-header field indicates the size of the entity-body.
-	 *         schema:
-	 *           type: integer
-	 *           example: 436
-	 *     schema:
-	 *       type: object
-	 *       $ref: '#/definitions/JWKSResponseBody'
-	 *
-	 * paths:
-	 *
-	 *  /jwks/Get:
-	 *    get:
-	 *      description: An endpoint that returns a valid jwks.
-	 *      tags: [JWKS Service]
-	 *      produces:
-	 *        - application/json
-	 *      responses:
-	 *        200:
-	 *          $ref: '#/responses/JWKSResponse'
-	 *        501:
-	 *          $ref: '#/responses/NotImplementedError'
-	 *        5XX:
-	 *          $ref: '#/responses/UncaughtError'
-	 */
-	@Action()
-	public async Get(ctx: Context<IJWKS.GetJWKSInDto>): Promise<IJWKS.GetJWKSOutDto> {
-		return await this.GetMethod(ctx);
-	}
+   *
+   * responses:
+   *
+   *   JWKSResponse:
+   *     description: Ok
+   *     headers:
+   *       content-type:
+   *         description: The Content-Type entity header is used to indicate the media type of the resource.
+   *         schema:
+   *           type: string
+   *           example: 'application/json; charset=utf-8'
+   *       content-length:
+   *         description: The Content-Length entity-header field indicates the size of the entity-body.
+   *         schema:
+   *           type: integer
+   *           example: 436
+   *     schema:
+   *       type: object
+   *       $ref: '#/definitions/JWKSResponseBody'
+   *
+   * paths:
+   *
+   *  /jwks/Get:
+   *    get:
+   *      description: An endpoint that returns a valid jwks.
+   *      tags: [JWKS Service]
+   *      produces:
+   *        - application/json
+   *      responses:
+   *        200:
+   *          $ref: '#/responses/JWKSResponse'
+   *        501:
+   *          $ref: '#/responses/NotImplementedError'
+   *        5XX:
+   *          $ref: '#/responses/UncaughtError'
+   */
+  @Action()
+  public async Get(ctx: Context<IJWKS.GetJWKSInDto>): Promise<IJWKS.GetJWKSOutDto> {
+    return await this.GetMethod(ctx);
+  }
 
-	@Method
-	public async GetMethod(ctx: Context<IJWKS.GetJWKSInDto>): Promise<IJWKS.GetJWKSOutDto> {
-		return this._keyStore.toJWKS(false);
-	}
+  @Method
+  public async GetMethod(ctx: Context<IJWKS.GetJWKSInDto>): Promise<IJWKS.GetJWKSOutDto> {
+    return this._keyStore.toJWKS(false);
+  }
 }
 
 module.exports = JWKSService;

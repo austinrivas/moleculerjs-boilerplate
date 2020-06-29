@@ -13,37 +13,37 @@ import { IAttack } from '@Interfaces';
 const broker = BrokerHelper.setupBroker();
 
 beforeEach(async () => {
-	await broker.start();
-	await setupDatabase();
+  await broker.start();
+  await setupDatabase();
 });
 
 afterEach(async () => {
-	await broker.stop();
+  await broker.stop();
 });
 
 describe('Test attack service', () => {
-	const params: IAttack.FireInDto = {
-		planetName: 'Alderaan',
-		weaponName: 'Death Star',
-	};
+  const params: IAttack.FireInDto = {
+    planetName: 'Alderaan',
+    weaponName: 'Death Star',
+  };
 
-	describe('Fire method', () => {
-		it('when ammo is up', async () => {
-			// eslint-disable-next-line
+  describe('Fire method', () => {
+    it('when ammo is up', async () => {
+      // eslint-disable-next-line
 			const { planetMessage, weaponMessage } = await AttackHelper.Fire(broker as any, params);
 
-			expect(planetMessage).toContain('Planet took');
-			expect(weaponMessage).toContain('Death Star did');
-		});
+      expect(planetMessage).toContain('Planet took');
+      expect(weaponMessage).toContain('Death Star did');
+    });
 
-		it('when ammo is empty', async () => {
-			getManager().update(Weapon, { name: 'Death Star' }, { ammo: 0 });
+    it('when ammo is empty', async () => {
+      getManager().update(Weapon, { name: 'Death Star' }, { ammo: 0 });
 
-			// eslint-disable-next-line
+      // eslint-disable-next-line
 			const { planetMessage, weaponMessage } = await AttackHelper.Fire(broker as any, params);
 
-			expect(planetMessage).toEqual('Planet took no damage');
-			expect(weaponMessage).toEqual('This weapon has no ammo');
-		});
-	});
+      expect(planetMessage).toEqual('Planet took no damage');
+      expect(weaponMessage).toEqual('This weapon has no ammo');
+    });
+  });
 });

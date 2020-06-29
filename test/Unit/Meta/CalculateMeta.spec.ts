@@ -9,28 +9,28 @@ import { Planet, Weapon } from '@Entities';
 //#endregion Local Imports
 
 describe('CalculateMeta constructor', () => {
-	it('should be defined', () => {
-		expect(CalculateMeta).toBeDefined();
-	});
+  it('should be defined', () => {
+    expect(CalculateMeta).toBeDefined();
+  });
 });
 
 describe('CalculateMeta functions', () => {
-	beforeEach(async () => {
-		await setupDatabase();
-	});
+  beforeEach(async () => {
+    await setupDatabase();
+  });
 
-	afterEach(async () => {
-		await getConnection().close();
-	});
+  afterEach(async () => {
+    await getConnection().close();
+  });
 
-	it('should calculate remaining shield', async () => {
-		const entityManager = getManager();
+  it('should calculate remaining shield', async () => {
+    const entityManager = getManager();
 
-		const weapon = await entityManager.findOne(Weapon, { where: { name: 'Death Star' } });
-		const planet = await entityManager.findOne(Planet, { where: { name: 'Alderaan' } });
+    const weapon = await entityManager.findOne(Weapon, { where: { name: 'Death Star' } });
+    const planet = await entityManager.findOne(Planet, { where: { name: 'Alderaan' } });
 
-		const { damage, remainingShield } = await CalculateMeta.Damage(weapon!, planet!);
+    const { damage, remainingShield } = await CalculateMeta.Damage(weapon!, planet!);
 
-		expect(remainingShield).toEqual(planet!.shield - damage);
-	});
+    expect(remainingShield).toEqual(planet!.shield - damage);
+  });
 });

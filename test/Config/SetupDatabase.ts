@@ -4,9 +4,9 @@ import CreateConnection from './Connection';
 //#region Local Imports
 
 const setupDatabase = async (): Promise<void> => {
-	await CreateConnection();
+  await CreateConnection();
 
-	await Seeder.seed();
+  await Seeder.seed();
 };
 
 export default setupDatabase;

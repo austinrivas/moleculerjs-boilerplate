@@ -190,31 +190,31 @@ import * as ApiGateway from 'moleculer-web';
  *       $ref: '#/definitions/ErrorUncaught'
  */
 const ApiService: ServiceSchema = {
-	name: 'api',
+  name: 'api',
 
-	mixins: [ApiGateway],
+  mixins: [ApiGateway],
 
-	// More info about settings: https://moleculer.services/docs/0.13/moleculer-web.html
-	settings: {
-		port: process.env.PORT || 3000,
+  // More info about settings: https://moleculer.services/docs/0.13/moleculer-web.html
+  settings: {
+    port: process.env.PORT || 3000,
 
-		routes: [
-			{
-				aliases: {},
-				cors: {
-					credentials: true,
-					methods: ['GET', 'OPTIONS', 'POST'],
-					origin: ['*'],
-				},
-				path: '/api',
-			},
-		],
+    routes: [
+      {
+        aliases: {},
+        cors: {
+          credentials: true,
+          methods: ['GET', 'OPTIONS', 'POST'],
+          origin: ['*'],
+        },
+        path: '/api',
+      },
+    ],
 
-		// Serve assets from 'public' folder
-		assets: {
-			folder: 'public',
-		},
-	},
+    // Serve assets from 'public' folder
+    assets: {
+      folder: 'public',
+    },
+  },
 };
 
 export = ApiService;

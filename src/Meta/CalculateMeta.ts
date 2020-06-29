@@ -7,14 +7,14 @@ import { DamageMetaOutDto } from '@Interfaces';
 //#endregion Interface Imports
 
 export namespace CalculateMeta {
-	export const Damage = async (weapon: Weapon, planet: Planet): Promise<DamageMetaOutDto> => {
-		const { damage: weaponDamage } = weapon;
-		const { shield } = planet;
+  export const Damage = async (weapon: Weapon, planet: Planet): Promise<DamageMetaOutDto> => {
+    const { damage: weaponDamage } = weapon;
+    const { shield } = planet;
 
-		const damage = Math.floor(Math.random() * weaponDamage);
+    const damage = Math.floor(Math.random() * weaponDamage);
 
-		const remainingShield = shield - damage;
+    const remainingShield = shield - damage;
 
-		return { damage, remainingShield };
-	};
+    return { damage, remainingShield };
+  };
 }
