@@ -1,6 +1,33 @@
-version: "3.0"
+version: "3.6"
 
 services:
+
+  postgres:
+    image: postgres:12
+    restart: always
+    env_file: .env
+    environment:
+      POSTGRES_PASSWORD: '${POSTGRES_PASSWORD}'
+
+  graphql-engine:
+    image: hasura/graphql-engine:v1.3.0-beta.3
+    depends_on:
+      - 'api'
+      - 'postgres'
+    env_file: .env
+    restart: always
+    environment:
+      HASURA_GRAPHQL_ADMIN_SECRET: '${HASURA_GRAPHQL_ADMIN_SECRET}'
+      HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:${POSTGRES_PASSWORD}@postgres:5432/postgres
+      HASURA_GRAPHQL_JWT_SECRET: '{"type": "RS256", "jwk_url": "http://api:3000/api/jwks/Get"}'
+    ports:
+      - 8080:8080
+  
+  nats-server:
+    image: nats:latest
+    ports:
+      - 4222:4222
+      
   api:
     build: .
     image: api
@@ -9,19 +36,19 @@ services:
         - 'planet'
         - 'jwks'
         - 'nats-server'
-    env_file: docker-compose.env
+    env_file: .env
     environment:
       SERVICES: api
       PORT: 3000
     ports:
-      - "3000:3000"
+      - 3000:3000
 
   jwks:
     build: .
     image: jwks
     depends_on:
         - 'nats-server'
-    env_file: docker-compose.env
+    env_file: .env
     environment:
       SERVICES: jwks
 
@@ -30,7 +57,7 @@ services:
     image: attack
     depends_on:
         - 'nats-server'
-    env_file: docker-compose.env
+    env_file: .env
     environment:
       SERVICES: attack
 
@@ -39,11 +66,6 @@ services:
     image: planet
     depends_on:
         - 'nats-server'
-    env_file: docker-compose.env
+    env_file: .env
     environment:
       SERVICES: planet
-
-  nats-server:
-    image: nats:latest
-    ports:
-      - "4222:4222"
