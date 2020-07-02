@@ -8,6 +8,10 @@ import { Errors } from 'moleculer';
 import { ApplicationEnvironments, KeyFilePath } from '@Config';
 //#endregion Config Imports
 
+//#region Meta Imports
+import { assertNever } from '@Meta';
+//#endregion Meta Imports
+
 export enum EncryptionAlgorithm {
   RS256 = 'RS256',
   RS384 = 'RS384',
@@ -56,32 +60,36 @@ export class JWTKeyStore {
    * @param path
    * @param algorithm
    */
+  /* eslint-disable complexity */
   public static getRSAKey(
     env: ApplicationEnvironments,
     jwtKey: string | undefined,
     path: KeyFilePath,
     algorithm: EncryptionAlgorithm,
   ): JWK.RSAKey {
-    if (jwtKey) {
-      return JWTKeyStore.parseRSAKey(jwtKey, algorithm);
-    } else if (!path) {
-      throw new Errors.MoleculerError(`RSA key path is undefined.`, 500, 'ERR_BAD_IMPLEMENTATION');
-    } else if (env !== ApplicationEnvironments.PROD) {
-      try {
+    switch (env) {
+      case ApplicationEnvironments.PROD:
+      case ApplicationEnvironments.STAGE:
+        if (!jwtKey) {
+          throw new Errors.MoleculerError('JWT_KEY is not defined.', 500, 'ERR_BAD_IMPLEMENTATION');
+        }
+        return JWTKeyStore.parseRSAKey(jwtKey, algorithm);
+      case ApplicationEnvironments.DEV:
+      case ApplicationEnvironments.QA:
+        try {
+          return JWTKeyStore.readRSAKey(path);
+        } catch (error) {
+          const rsaKey = JWTKeyStore.createRSAKey(algorithm);
+          JWTKeyStore.saveRSAKey(path, rsaKey);
+          return rsaKey;
+        }
+      case ApplicationEnvironments.TEST:
         return JWTKeyStore.readRSAKey(path);
-      } catch (error) {
-        const rsaKey = JWTKeyStore.createRSAKey(algorithm);
-        JWTKeyStore.saveRSAKey(path, rsaKey);
-        return rsaKey;
-      }
-    } else {
-      throw new Errors.MoleculerError(
-        'RSA key generation in production is not allowed.',
-        500,
-        'ERR_BAD_IMPLEMENTATION',
-      );
+      default:
+        assertNever(env, 'Unexpected Application Environment');
     }
   }
+  /* eslint-enable complexity */
 
   /**
    * Checks that a given key is an RSA key.
