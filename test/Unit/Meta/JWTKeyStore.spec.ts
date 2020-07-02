@@ -3,7 +3,7 @@ import { JWK } from 'jose';
 //#endregion Global Imports
 
 //#region Config Imports
-import { JWT_KEY_FILE_PATH, isKeyFilePath } from '@Config';
+import { JWT_KEY_FILE_PATH } from '@Config';
 //#endregion Config Imports
 
 //#region Meta Imports

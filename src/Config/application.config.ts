@@ -22,7 +22,7 @@ const isApplicationEnvironment = (env: string | undefined): env is ApplicationEn
  * Guard to check if the env is a live deployed environment
  * @param env
  */
-export const isLiveEnvironment = (env: ApplicationEnvironments) => {
+export const isLiveEnvironment = (env: ApplicationEnvironments): boolean => {
   return env === ApplicationEnvironments.PROD || env === ApplicationEnvironments.STAGE;
 };
 

@@ -117,11 +117,11 @@ class JWKSService extends MoleculerService {
    */
   @Action()
   public async Get(): Promise<IJWKS.GetJWKSOutDto> {
-    return this.getJSONWebKeySet();
+    return this._getJSONWebKeySet();
   }
 
   @Method
-  private getJSONWebKeySet(): JSONWebKeySet {
+  private _getJSONWebKeySet(): JSONWebKeySet {
     return this._keyStore.getJWKS();
   }
 

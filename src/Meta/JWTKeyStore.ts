@@ -25,6 +25,13 @@ export class JWTKeyStore {
   private _keyStore: JWKS.KeyStore;
 
   /**
+   * Creating a new instance of JWTKeyStore creates an empty key store that is exposed via the public `getJWKS` method.
+   */
+  constructor() {
+    this._keyStore = new JWKS.KeyStore();
+  }
+
+  /**
    * Returns a generated RSA key and saves it to a local .pem file at the defined path.
    * @param path
    * @param algorithm
@@ -144,13 +151,6 @@ export class JWTKeyStore {
         'ERR_BAD_IMPLEMENTATION',
       );
     }
-  }
-
-  /**
-   * Creating a new instance of JWTKeyStore creates an empty key store that is exposed via the public `getJWKS` method.
-   */
-  constructor() {
-    this._keyStore = new JWKS.KeyStore();
   }
 
   /**
