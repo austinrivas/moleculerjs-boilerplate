@@ -8,6 +8,7 @@
     "start": "NODE_ENV=production TS_NODE_PROJECT=tsconfig.production.json node -r tsconfig-paths/register ./node_modules/moleculer/bin/moleculer-runner.js dist/services",
     "cli": "pankod-cli add",
     "test": "NODE_ENV=test jest --coverage --runInBand",
+    "test:watch": "npm run test -- --watch",
     "lint": "eslint -c .eslintrc.js --ext .ts {services,src,test}/**",
     "format": "eslint -c .eslintrc.js --ext .ts --fix {services,src,test}/**",
     "dc:up": "docker-compose up --build -d",
