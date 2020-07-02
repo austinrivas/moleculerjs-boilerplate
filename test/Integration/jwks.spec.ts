@@ -23,8 +23,8 @@ beforeAll(async () => {
 
 afterAll(async () => broker.stop());
 
-describe('Test JWKS service requests', () => {
-  it('Test GET request on jwks/Get', async () => {
+describe('JWKS service', () => {
+  it('should GET request on jwks/Get', async () => {
     return request(server)
       .get('/jwks/Get')
       .then((res: request.Response) => {
@@ -32,5 +32,10 @@ describe('Test JWKS service requests', () => {
         expect(res.header['content-type']).toBe('application/json; charset=utf-8');
         expect(res.body).toMatchObject<IJWKS.GetJWKSOutDto>(Mocks.JWKS.GetJWKSOutDto);
       });
+  });
+
+  it('should call jwks.Get action', async () => {
+    const outDto = await broker.call('jwks.Get');
+    expect(outDto).toMatchObject<IJWKS.GetJWKSOutDto>(Mocks.JWKS.GetJWKSOutDto);
   });
 });
