@@ -1,6 +1,11 @@
 //#region Local Imports
 import { BrokerHelper } from '@Test/Utils';
+import { Mocks } from '@Test/Config/mock.setup';
 //#endregion Local Imports
+
+//#region Interface Imports
+import { IJWKS } from '@Interfaces';
+//#endregion Interface Imports
 
 const broker = BrokerHelper.setupBroker();
 
@@ -13,10 +18,10 @@ afterEach(async () => {
 });
 
 describe('Test jwks service', () => {
-  describe('getJWK Method', () => {
-    it('returns a jwk', async () => {
-      const jwk = '';
-      expect(jwk).toContain('jwk');
+  describe('jwks.Get Action', () => {
+    it('returns a JSONWebKeySet', async () => {
+      const jwks = await broker.call('jwks.Get');
+      expect(jwks).toMatchObject<IJWKS.GetJWKSOutDto>(Mocks.JWKS.GetJWKSOutDto);
     });
   });
 });
