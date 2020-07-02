@@ -18,6 +18,14 @@ const isApplicationEnvironment = (env: string | undefined): env is ApplicationEn
   return Object.values(ApplicationEnvironments).includes(env as ApplicationEnvironments);
 }
 
+/**
+ * Guard to check if the env is a live deployed environment
+ * @param env 
+ */
+export const isLiveEnvironment = (env: ApplicationEnvironments) => {
+  return env === ApplicationEnvironments.PROD || env === ApplicationEnvironments.STAGE;
+}
+
 if (!isApplicationEnvironment(process.env.NODE_ENV)) {
   throw new Errors.MoleculerError(
     `Invalid Application Environment ${process.env.NODE_ENV}.`,
