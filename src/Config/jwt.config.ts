@@ -3,16 +3,16 @@ import path from 'path';
 //#endregion Global Imports
 
 //#region Config Imports
-import { NODE_ENV, ApplicationEnvironments, isLiveEnvironment } from '@Config/application.config';
+import { NODE_ENV, ApplicationEnvironments } from '@Config/application.config';
 //#endregion Config Imports
 
-export type KeyFilePath = string;
 /**
  * A typeguard to ensure a string is a valid file path
  * @param path 
  */
 const keyFilePathRegex = /^[.]*\/([A-z0-9-_+]+\/)*([A-z0-9]+\.(pem))$/
 const keyFilePattern = new RegExp(keyFilePathRegex);
+export type KeyFilePath = string;
 export const isKeyFilePath = (path: string): path is KeyFilePath => {
   return typeof path === "string" && keyFilePattern.test(path);
 }
