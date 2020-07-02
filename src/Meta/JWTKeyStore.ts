@@ -5,16 +5,16 @@ import { Errors } from 'moleculer';
 //#endregion Global Imports
 
 //#region Config Imports
-import { NODE_ENV, ApplicationEnvironments } from '@Config';
+import { ApplicationEnvironments, KeyFilePath } from '@Config';
 //#endregion Config Imports
 
-enum EncryptionAlgorithm {
+export enum EncryptionAlgorithm {
   RS256 = 'RS256',
   RS384 = 'RS384',
   RS512 = 'RS512'
 }
 
-type JWTKey = JWK.RSAKey | JWK.ECKey | JWK.OKPKey | JWK.OctKey;
+export type JWTKey = JWK.RSAKey | JWK.ECKey | JWK.OKPKey | JWK.OctKey;
 
 /**
  * JWTKeyStore is meant to be a singleton class implemented by the JWKS service.
@@ -50,8 +50,9 @@ export class JWTKeyStore {
    * @param algorithm
    */
   public static getRSAKey(
+    env: ApplicationEnvironments,
     jwtKey: string | undefined,
-    path: string | undefined,
+    path: KeyFilePath,
     algorithm: EncryptionAlgorithm,
   ): JWK.RSAKey {
     if (jwtKey) {
@@ -62,7 +63,7 @@ export class JWTKeyStore {
         500,
         'ERR_BAD_IMPLEMENTATION',
       );
-    } else if (NODE_ENV !== ApplicationEnvironments.PROD) {
+    } else if (env !== ApplicationEnvironments.PROD) {
       try {
         return JWTKeyStore.readRSAKey(path);
       } catch (error) {
@@ -118,7 +119,7 @@ export class JWTKeyStore {
    * Reads and RSA key from the defined path and verifies it.
    * @param path
    */
-  public static readRSAKey(path: string): JWK.RSAKey {
+  public static readRSAKey(path: KeyFilePath): JWK.RSAKey {
     const file = fs.readFileSync(path);
     const rsaKey = JWK.asKey(file);
     if (JWTKeyStore.isRSAKey(rsaKey)) {
@@ -137,7 +138,7 @@ export class JWTKeyStore {
    * @param path 
    * @param rsaKey 
    */
-  public static saveRSAKey(path: string, rsaKey: JWK.RSAKey): void {
+  public static saveRSAKey(path: KeyFilePath, rsaKey: JWK.RSAKey): void {
     try {
       fs.writeFileSync(path, rsaKey.toPEM(true));
     } catch (error) {
@@ -169,11 +170,11 @@ export class JWTKeyStore {
    * @param keyPath 
    * @param algorithm 
    */
-  public addKey(jwtKey: string | undefined, keyPath: string | undefined, algorithm: string): void {
+  public addKey(env: ApplicationEnvironments, jwtKey: string | undefined, keyPath: KeyFilePath, algorithm: string): void {
     let rsaKey: JWK.RSAKey;
 
     if (JWTKeyStore.isAlgorithm(algorithm)) {
-      rsaKey = JWTKeyStore.getRSAKey(jwtKey, keyPath, algorithm);
+      rsaKey = JWTKeyStore.getRSAKey(env, jwtKey, keyPath, algorithm);
     } else {
       throw new Errors.MoleculerError(
         `Invalid JWT algorithm: ${algorithm}`,

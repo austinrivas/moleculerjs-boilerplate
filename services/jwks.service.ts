@@ -31,7 +31,7 @@ class JWKSService extends MoleculerService {
   constructor(broker: ServiceBroker) {
     super(broker);
     this._keyStore = new JWTKeyStore();
-    this._keyStore.addKey(JWT_KEY, JWT_KEY_FILE_PATH, JWT_ALGORITHM);
+    this._keyStore.addKey(NODE_ENV, JWT_KEY, JWT_KEY_FILE_PATH, JWT_ALGORITHM);
   }
 
   /**
