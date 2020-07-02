@@ -1,2 +1,2 @@
 export { CalculateMeta } from '@Meta/CalculateMeta';
-export { JWTMeta } from '@Meta/JWTMeta';
+export { JWTKeyStore } from '@Meta/JWTKeyStore';

@@ -1,16 +1,20 @@
 //#region Global Imports
-import { JWKS } from 'jose';
-import { Context, Service as MoleculerService, ServiceBroker } from 'moleculer';
+import { JSONWebKeySet } from 'jose';
+import { Service as MoleculerService, ServiceBroker } from 'moleculer';
 import { Action, Method, Service } from 'moleculer-decorators';
 //#endregion Global Imports
 
-//#region Local Imports
-import { JWTMeta } from '@Meta/JWTMeta';
-//#endregion Local Imports
+//#region Config Imports
+import { JWT_ALGORITHM, JWT_KEY, JWT_KEY_FILE_PATH, NODE_ENV, ApplicationEnvironments } from '@Config';
+//#endregion Config Imports
 
 //#region Interface Imports
 import { IJWKS } from '@Interfaces';
 //#endregion Interface Imports
+
+//#region Local Imports
+import { JWTKeyStore } from '@Meta/JWTKeyStore';
+//#endregion Local Imports
 
 /**
  * @swagger
@@ -22,11 +26,12 @@ import { IJWKS } from '@Interfaces';
   name: 'jwks',
 })
 class JWKSService extends MoleculerService {
-  private _keyStore: JWKS.KeyStore;
+  private _keyStore: JWTKeyStore;
 
   constructor(broker: ServiceBroker) {
     super(broker);
-    this._keyStore = JWTMeta.GetJWTStore();
+    this._keyStore = new JWTKeyStore();
+    this._keyStore.addKey(JWT_KEY, JWT_KEY_FILE_PATH, JWT_ALGORITHM);
   }
 
   /**
@@ -105,13 +110,19 @@ class JWKSService extends MoleculerService {
    *          $ref: '#/responses/UncaughtError'
    */
   @Action()
-  public async Get(ctx: Context<IJWKS.GetJWKSInDto>): Promise<IJWKS.GetJWKSOutDto> {
-    return await this.GetMethod(ctx);
+  public async Get(): Promise<IJWKS.GetJWKSOutDto> {
+    return this.getJSONWebKeySet();
   }
 
   @Method
-  public async GetMethod(ctx: Context<IJWKS.GetJWKSInDto>): Promise<IJWKS.GetJWKSOutDto> {
-    return this._keyStore.toJWKS(false);
+  private getJSONWebKeySet(): JSONWebKeySet {
+    return this._keyStore.getJWKS();
+  }
+
+  created() {
+    if (NODE_ENV === ApplicationEnvironments.DEV) {
+      console.log(`Service 'jwks' environment.`, { JWT_ALGORITHM, JWT_KEY, JWT_KEY_FILE_PATH, NODE_ENV });
+    }
   }
 }
 
