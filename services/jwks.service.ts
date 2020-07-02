@@ -5,7 +5,13 @@ import { Action, Method, Service } from 'moleculer-decorators';
 //#endregion Global Imports
 
 //#region Config Imports
-import { JWT_ALGORITHM, JWT_KEY, JWT_KEY_FILE_PATH, NODE_ENV, ApplicationEnvironments } from '@Config';
+import {
+  JWT_ALGORITHM,
+  JWT_KEY,
+  JWT_KEY_FILE_PATH,
+  NODE_ENV,
+  ApplicationEnvironments,
+} from '@Config';
 //#endregion Config Imports
 
 //#region Interface Imports
@@ -121,7 +127,12 @@ class JWKSService extends MoleculerService {
 
   created() {
     if (NODE_ENV === ApplicationEnvironments.DEV) {
-      console.log(`Service 'jwks' environment.`, { JWT_ALGORITHM, JWT_KEY, JWT_KEY_FILE_PATH, NODE_ENV });
+      console.log(`Service 'jwks' environment.`, {
+        JWT_ALGORITHM,
+        JWT_KEY,
+        JWT_KEY_FILE_PATH,
+        NODE_ENV,
+      });
     }
   }
 }

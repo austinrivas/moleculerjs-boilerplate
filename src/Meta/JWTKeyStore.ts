@@ -11,14 +11,14 @@ import { ApplicationEnvironments, KeyFilePath } from '@Config';
 export enum EncryptionAlgorithm {
   RS256 = 'RS256',
   RS384 = 'RS384',
-  RS512 = 'RS512'
+  RS512 = 'RS512',
 }
 
 export type JWTKey = JWK.RSAKey | JWK.ECKey | JWK.OKPKey | JWK.OctKey;
 
 /**
  * JWTKeyStore is meant to be a singleton class implemented by the JWKS service.
- * 
+ *
  * It exposes one public method `getJWKS` which returns the key set stored in the private key store.
  */
 export class JWTKeyStore {
@@ -41,7 +41,7 @@ export class JWTKeyStore {
         'ERR_BAD_IMPLEMENTATION',
       );
     }
-  };
+  }
 
   /**
    * Returns an RSA key by either reading it from and env var, file, or generating one from scratch.
@@ -58,16 +58,12 @@ export class JWTKeyStore {
     if (jwtKey) {
       return JWTKeyStore.parseRSAKey(jwtKey, algorithm);
     } else if (!path) {
-      throw new Errors.MoleculerError(
-        `RSA key path is undefined.`,
-        500,
-        'ERR_BAD_IMPLEMENTATION',
-      );
+      throw new Errors.MoleculerError(`RSA key path is undefined.`, 500, 'ERR_BAD_IMPLEMENTATION');
     } else if (env !== ApplicationEnvironments.PROD) {
       try {
         return JWTKeyStore.readRSAKey(path);
       } catch (error) {
-        let rsaKey = JWTKeyStore.createRSAKey(algorithm);
+        const rsaKey = JWTKeyStore.createRSAKey(algorithm);
         JWTKeyStore.saveRSAKey(path, rsaKey);
         return rsaKey;
       }
@@ -78,7 +74,7 @@ export class JWTKeyStore {
         'ERR_BAD_IMPLEMENTATION',
       );
     }
-  };
+  }
 
   /**
    * Checks that a given key is an RSA key.
@@ -86,7 +82,7 @@ export class JWTKeyStore {
    */
   public static isRSAKey(key: JWTKey): key is JWK.RSAKey {
     return JWK.isKey(key) && key.kty !== undefined && key.kty === 'RSA';
-  };
+  }
 
   /**
    * Checks that a given key algorithm value is allowed.
@@ -113,7 +109,7 @@ export class JWTKeyStore {
         'ERR_BAD_IMPLEMENTATION',
       );
     }
-  };
+  }
 
   /**
    * Reads and RSA key from the defined path and verifies it.
@@ -131,12 +127,12 @@ export class JWTKeyStore {
         'ERR_BAD_IMPLEMENTATION',
       );
     }
-  };
+  }
 
   /**
    * Save an rsa key to the given file path.
-   * @param path 
-   * @param rsaKey 
+   * @param path
+   * @param rsaKey
    */
   public static saveRSAKey(path: KeyFilePath, rsaKey: JWK.RSAKey): void {
     try {
@@ -159,18 +155,23 @@ export class JWTKeyStore {
 
   /**
    * Adding a key to the key store makes it fetchable via `getJWKS`.
-   * 
+   *
    * Only RSA keys are addable to the keystore.
-   * 
+   *
    * If jwtKey is undefined a key will be generated, this is useful during testing and development.
-   * 
+   *
    * In production jwtKey should be defined via an environment variable.
-   * 
-   * @param jwtKey 
-   * @param keyPath 
-   * @param algorithm 
+   *
+   * @param jwtKey
+   * @param keyPath
+   * @param algorithm
    */
-  public addKey(env: ApplicationEnvironments, jwtKey: string | undefined, keyPath: KeyFilePath, algorithm: string): void {
+  public addKey(
+    env: ApplicationEnvironments,
+    jwtKey: string | undefined,
+    keyPath: KeyFilePath,
+    algorithm: string,
+  ): void {
     let rsaKey: JWK.RSAKey;
 
     if (JWTKeyStore.isAlgorithm(algorithm)) {

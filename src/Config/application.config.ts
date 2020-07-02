@@ -7,24 +7,24 @@ export enum ApplicationEnvironments {
   PROD = 'production',
   QA = 'qa',
   STAGE = 'staging',
-  TEST = 'test'
+  TEST = 'test',
 }
 
 /**
  * Type guard to ensure that process.env.NODE_ENV is a valid value.
- * @param env 
+ * @param env
  */
 const isApplicationEnvironment = (env: string | undefined): env is ApplicationEnvironments => {
   return Object.values(ApplicationEnvironments).includes(env as ApplicationEnvironments);
-}
+};
 
 /**
  * Guard to check if the env is a live deployed environment
- * @param env 
+ * @param env
  */
 export const isLiveEnvironment = (env: ApplicationEnvironments) => {
   return env === ApplicationEnvironments.PROD || env === ApplicationEnvironments.STAGE;
-}
+};
 
 if (!isApplicationEnvironment(process.env.NODE_ENV)) {
   throw new Errors.MoleculerError(
@@ -34,6 +34,4 @@ if (!isApplicationEnvironment(process.env.NODE_ENV)) {
   );
 }
 
-export const {
-  NODE_ENV
-} = process.env
+export const { NODE_ENV } = process.env;

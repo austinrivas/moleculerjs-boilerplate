@@ -8,23 +8,26 @@ import { NODE_ENV, ApplicationEnvironments } from '@Config/application.config';
 
 /**
  * A typeguard to ensure a string is a valid file path
- * @param path 
+ * @param path
  */
-const keyFilePathRegex = /^[.]*\/([A-z0-9-_+]+\/)*([A-z0-9]+\.(pem))$/
+const keyFilePathRegex = /^[.]*\/([A-z0-9-_+]+\/)*([A-z0-9]+\.(pem))$/;
 const keyFilePattern = new RegExp(keyFilePathRegex);
 export type KeyFilePath = string;
 export const isKeyFilePath = (path: string): path is KeyFilePath => {
-  return typeof path === "string" && keyFilePattern.test(path);
-}
+  return typeof path === 'string' && keyFilePattern.test(path);
+};
 
 /**
  * Generate a file path for an rsa key based on the app environment.
- * @param root 
- * @param env 
+ * @param root
+ * @param env
  */
-export const generateKeyPath = (root: string | undefined, env: ApplicationEnvironments): KeyFilePath => {
+export const generateKeyPath = (
+  root: string | undefined,
+  env: ApplicationEnvironments,
+): KeyFilePath => {
   return path.resolve(root || '.', `keys/${env}.pem`);
-}
+};
 
 export const {
   JWT_KEY,
