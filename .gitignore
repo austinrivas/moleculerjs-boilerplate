@@ -59,7 +59,7 @@ typings/
 
 # keys
 *.pem
-custom/keys
+!test.pem
 
 # history
 .history
